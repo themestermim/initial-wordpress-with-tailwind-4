@@ -1,3 +1,5 @@
+@import "./colors.css";
+
 @theme {
 	--font-*: initial;
 	--font-yekan: "IranYekan";
@@ -6,86 +8,78 @@
 	--color-black: oklch(0.1448 0 0);
 	--color-transparent: transparent;
 
-	--color-neutral-50: oklch(0.9581 0 0);
-	--color-neutral-100: oklch(0.8641 0.0014 286.37);
-	--color-neutral-200: oklch(0.7979 0.0018 247.84);
-	--color-neutral-300: oklch(0.7023 0.0031 264.54);
-	--color-neutral-400: oklch(0.6399 0.0032 264.54);
-	--color-neutral-500: oklch(0.5418 0.0048 271.33);
-	--color-neutral-600: oklch(0.5069 0.0049 271.32);
-	--color-neutral-700: oklch(0.4274 0.0035 264.52);
-	--color-neutral-800: oklch(0.3608 0.0034 286.23);
-	--color-neutral-900: oklch(0.3046 0.0023 247.9);
+	--color-neutral-50: var(--neutral-50);
+	--color-neutral-100: var(--neutral-100);
+	--color-neutral-200: var(--neutral-200);
+	--color-neutral-300: var(--neutral-300);
+	--color-neutral-400: var(--neutral-400);
+	--color-neutral-500: var(--neutral-500);
+	--color-neutral-600: var(--neutral-600);
+	--color-neutral-700: var(--neutral-700);
+	--color-neutral-800: var(--neutral-800);
+	--color-neutral-900: var(--neutral-900);
 
-	--color-secondary-50: oklch(0.9588624911434561 0.026238674974211874 62.01018670608293);
-	--color-secondary-100: oklch(0.8993935758045928 0.06957368671542243 64.64069084491508);
-	--color-secondary-200: oklch(0.807150339345013 0.16898479735873462 74.47241445909405); /* primary color */
-	--color-secondary-300: oklch(0.7524390112871772 0.1591498374375433 74.42904950461755);
-	--color-secondary-400: oklch(0.6767710913194558 0.14294722452674355 74.72904015928634);
-	--color-secondary-500: oklch(0.5893676819036863 0.12465739828671962 74.43060762855916);
-	--color-secondary-600: oklch(0.49728756950961855 0.10507387624030123 74.65194807490515);
-	--color-secondary-700: oklch(0.3971802177413655 0.08393081033006271 74.62855714626633);
-	--color-secondary-800: oklch(0.29170692645866836 0.06203652649466711 73.30483397733398);
-	--color-secondary-900: oklch(0.17795436630161665 0.037877104310294764 73.13758196075607);
-	--color-secondary: oklch(0.807150339345013 0.16898479735873462 74.47241445909405);
+	--color-primary-50: var(--primary-50);
+	--color-primary-100: var(--primary-100);
+	--color-primary-200: var(--primary-200);
+	--color-primary-300: var(--primary-300);
+	--color-primary-400: var(--primary-400);
+	--color-primary-500: var(--primary-500);
+	--color-primary-600: var(--primary-600);
+	--color-primary-700: var(--primary-700);
+	--color-primary-800: var(--primary-800);
+	--color-primary-900: var(--primary-900);
+	--color-primary: var(--color-primary-500);
 
-	--color-brand-50: oklch(0.9568018167812243 0.014873251851463909 277.8506793098002);
-	--color-brand-100: oklch(0.8948533629759613 0.03621240173772934 275.33027818531565);
-	--color-brand-200: oklch(0.7977231189425339 0.07204062981853475 274.9915589537309);
-	--color-brand-300: oklch(0.7132403546337039 0.10596423644150897 272.588670326628);
-	--color-brand-400: oklch(0.6298844559663767 0.13763833553157537 269.43136982992576);
-	--color-brand-500: oklch(0.5528285797519158 0.15497351231777107 266.78793618535707);
-	--color-brand-600: oklch(0.4767393727757645 0.13150331453454742 266.34099427273117);
-	--color-brand-700: oklch(0.4009473466042505 0.11259337250344954 266.6760656891378);
-	--color-brand-800: oklch(0.3274510800201063 0.09125183713880912 266.51787735279515); /* primary color */
-	--color-brand-900: oklch(0.1797085109052167 0.04924193030909403 265.2136537413937);
-	--color-brand: oklch(0.3274510800201063 0.09125183713880912 266.51787735279515);
-
-	--color-green: oklch(0.73058530929194 0.20578095607581515 148.4092847873402);
-
-	--color-red: oklch(0.542431707407173 0.1980462283801081 26.968244804944973);
+	--color-error-50: var(--error-50);
+	--color-error-100: var(--error-100);
+	--color-error-200: var(--error-200);
+	--color-error-300: var(--error-300);
+	--color-error-400: var(--error-400);
+	--color-error-500: var(--error-500);
+	--color-error-600: var(--error-600);
+	--color-error-700: var(--error-700);
+	--color-error-800: var(--error-800);
+	--color-error-900: var(--error-900);
+	--color-error: var(--color-error-500);
 
 	--breakpoint-xl: 84rem;
 	--breakpoint-2xl: 9999rem;
 
-	/* --text-zero: 0rem;
-	--text-zero--line-height: 0rem;
-	--text-xxs: 0.6875rem;
-	--text-xxs--line-height: 1.125rem;
-	--text-tiny: 0.625rem;
-	--text-tiny--line-height: 1rem;
-	--text-xs--line-height: 1.125rem;
-	--text-sm: 0.875rem;
-	--text-sm--line-height: 1.375rem;
-	--text-base: 1rem;
-	--text-base--line-height: 1.5rem;
-	--text-lg: 1.125rem;
-	--text-lg--line-height: 1.75rem;
-	--text-xl: 1.25rem;
-	--text-xl--line-height: 1.875rem;
-	--text-2xl: 1.5rem;
-	--text-2xl--line-height: 2.25rem;
-	--text-3xl: 1.75rem;
-	--text-3xl--line-height: 2.625rem;
-	--text-4xl: 3rem;
-	--text-4xl--line-height: 4rem;
-	--text-5xl: 2.5rem;
-	--text-5xl--line-height: 3.75rem;
-	--text-6xl: 3rem;
-	--text-6xl--line-height: 4.5rem; */
+	--text-10: 0.625rem;
+	--text-10--line-height: 1.5;
+	--text-12: 0.75rem;
+	--text-12--line-height: 1.5;
+	--text-14: 0.875rem;
+	--text-14--line-height: 1.5;
+	--text-16: 1rem;
+	--text-16--line-height: 1.5;
+	--text-18: 1.125rem;
+	--text-18--line-height: 1.5;
+	--text-20: 1.25rem;
+	--text-20--line-height: 1.5;
+	--text-22: 1.375rem;
+	--text-22--line-height: 1.5;
+	--text-24: 1.5rem;
+	--text-24--line-height: 1.5;
+	--text-26: 1.625rem;
+	--text-26--line-height: 1.5;
+	--text-28: 1.75rem;
+	--text-28--line-height: 1.5;
+	--text-30: 1.875rem;
+	--text-30--line-height: 1.5;
+	--text-32: 2rem;
+	--text-32--line-height: 1.5;
+	--text-34: 2.125rem;
+	--text-34--line-height: 1.5;
+	--text-36: 2.25rem;
+	--text-36--line-height: 1.5;
+	--text-38: 2.375rem;
+	--text-38--line-height: 1.5;
+	--text-40: 2.5rem;
+	--text-40--line-height: 1.5;
 
 	--shadow-*: initial;
-	/* --shadow-none: 0 0 #000;
-	--shadow-xlight: 0 4px 12px oklch(0 0 0 / 12.16%);
-	--shadow-xdark: 0 4px 12px oklch(0.9401 0 0 / 24%);
-	--shadow-light: 0 4px 16px oklch(0 0 0 / 40%);
-	--shadow-dark: 0 4px 16px oklch(0.9401 0 0 / 24%);
-	--shadow-l: 1px 0 0; */
-
-	--text-shadow-700: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.03em 0 currentColor, 0 -0.03em 0 currentColor;
-	/*--shadow-light: 0 4px 16px oklch(0 0 0 / 20%);*/
-
-	/*--aspect-ratio: 16 / 12;*/
 
 	--blur-px: 1px;
 
