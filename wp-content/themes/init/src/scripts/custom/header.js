@@ -1,134 +1,192 @@
 /* eslint-env browser */
-(function() {
-  'use strict';
-  document.addEventListener('DOMContentLoaded', function() {
-	  const desktopParent = document.querySelector('#desktop-darkmode-parent');
-	  const mobileParent = document.querySelector('#mobile-darkmode-parent');
-	  const darkmodeComponent = document.querySelector('#darkmode-component');
-
-	  function moveDarkmode() {
-		  if (window.innerWidth < 1024) {
-			  if (!mobileParent.contains(darkmodeComponent)) {
-				  mobileParent.appendChild(darkmodeComponent);
-			  }
-		  } else {
-			  if (!desktopParent.contains(darkmodeComponent)) {
-				  desktopParent.appendChild(darkmodeComponent);
-			  }
-		  }
-	  }
-
-	  moveDarkmode();
-
-	  window.addEventListener('resize', moveDarkmode);
-  });
-})();
-
-function handleDarkMode() {
+function handleHeader() {
 	return {
-		theme: "light",
-		toggleTheme(theme) {
-			this.theme = theme;
-			this.setCookie("theme", theme, 30);
-			this.applyTheme();
-		},
-		applyTheme() {
-			const html = document.documentElement;
-			if (this.theme === "dark") {
-				html.classList.add("dark");
-			} else {
-				html.classList.remove("dark");
-			}
-		},
-		setCookie(name, value, days) {
-			const expires = new Date(Date.now() + days * 864e5).toUTCString();
-			document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-		},
-
-		getCookie(name) {
-			return document.cookie.split("; ").reduce((r, v) => {
-				const parts = v.split("=");
-				return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-			}, "");
-		},
-		init() {
-			const savedTheme = this.getCookie("theme");
-			if (savedTheme) {
-				this.theme = savedTheme;
-			} else {
-				this.theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-			}
-
-			this.applyTheme();
-		},
-	}
-}
-
-function handleMenu() {
-	return {
-		smMenuVisible: false,
-		activeParent: "",
-		isScrolled: false,
+		isMenuOpen: false,
 		isSearchOpen: false,
-		searchList: [1,2,3,4],
-		searching: false,
-		searchInput: "",
-		toggleSmMenu() {
-			if(this.smMenuVisible) {
-				this.smMenuVisible = false;
-				this.activeParent = "";
+		isDesktop: false,
+		openItems: {},
+
+		init() {
+			this.updateDesktopState();
+		},
+		updateDesktopState() {
+			const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
+			if (this.isDesktop !== isDesktop) {
+				this.closeAll();
+			}
+
+			this.isDesktop = isDesktop;
+		},
+		openMenu() {
+			if (this.isDesktop) {
+				return;
+			}
+
+			this.closeSearch(false);
+			this.isMenuOpen = true;
+			fixBody();
+			this.$nextTick(() => this.$refs.menuCloseButton.focus());
+		},
+		closeMenu(restoreFocus = true) {
+			this.isMenuOpen = false;
+			this.resetSubmenus();
+			unfixBody();
+
+			if (restoreFocus) {
+				this.$refs.menuButton.focus();
+			}
+		},
+		destroy() {
+			if (this.isMenuOpen) {
+				unfixBody();
+			}
+		},
+		trapMenuFocus(event) {
+			if (this.isDesktop || !this.isMenuOpen) {
+				return;
+			}
+
+			const elements = Array.from(this.$refs.menuPanel.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]'))
+				.filter(element => element.getClientRects().length > 0);
+			const firstElement = elements[0];
+			const lastElement = elements[elements.length - 1];
+
+			if (event.shiftKey && document.activeElement === firstElement) {
+				event.preventDefault();
+				lastElement.focus();
+			} else if (!event.shiftKey && document.activeElement === lastElement) {
+				event.preventDefault();
+				firstElement.focus();
+			}
+		},
+		toggleMenu() {
+			if (this.isMenuOpen) {
+				this.closeMenu();
 			} else {
-				this.smMenuVisible = true;
-			}
-		},
-		openParentSm(target) {
-			if(window.innerWidth < 1024) {
-				if(this.activeParent === target) {
-					this.activeParent = "";
-				} else {
-					this.activeParent = target;
-				}
-			}
-		},
-		openParentLg(target) {
-			if(window.innerWidth >= 1024) {
-				this.activeParent = target;
-			}
-		},
-		closeParentLg() {
-			if(window.innerWidth >= 1024) {
-				this.activeParent = "";
-			}
-		},
-		checkScroll() {
-			const y = window.scrollY;
-			if (!this.isScrolled && y > 210) {
-				this.isScrolled = true;
-			} else if (this.isScrolled && y < 150) {
-				this.isScrolled = false;
+				this.openMenu();
 			}
 		},
 		openSearch() {
+			this.closeMenu(false);
 			this.isSearchOpen = true;
-			fixBody();
+			this.$nextTick(() => this.$refs.searchInput.focus());
 		},
-		closeSearch() {
+		closeSearch(restoreFocus = true) {
 			this.isSearchOpen = false;
-			unfixBody();
-		},
-		closeDesktopSearch() {
-			if(window.innerWidth >= 1024) {
-				if(this.isSearchOpen) {
-					this.closeSearch();
-				}
+
+			if (restoreFocus) {
+				this.$refs.searchButton.focus();
 			}
 		},
-		init() {
-			this.checkScroll();
-
-			window.addEventListener("scroll", () => {
-				this.checkScroll();
+		toggleSearch() {
+			if (this.isSearchOpen) {
+				this.closeSearch();
+			} else {
+				this.openSearch();
+			}
+		},
+		closeActiveLayer() {
+			if (this.isSearchOpen) {
+				this.closeSearch();
+			} else if (this.isMenuOpen) {
+				this.closeMenu();
+			} else {
+				this.resetSubmenus();
+			}
+		},
+		closeAll() {
+			this.closeSearch(false);
+			this.closeMenu(false);
+		},
+		resetSubmenus(fromLevel = 1) {
+			Object.keys(this.openItems).forEach(key => {
+				if (Number(key.replace('level', '')) >= fromLevel) {
+					delete this.openItems[key];
+				}
 			});
-		}
+		},
+		toggleItem(level, itemId) {
+			if (this.isOpen(level, itemId)) {
+				this.closeItem(level, itemId);
+			} else {
+				this.openItem(level, itemId);
+			}
+		},
+		openItem(level, itemId) {
+			this.closeSearch(false);
+			this.resetSubmenus(level);
+			this.openItems['level' + level] = itemId;
+		},
+		closeItem(level, itemId) {
+			if (this.isOpen(level, itemId)) {
+				this.resetSubmenus(level);
+			}
+		},
+		openDesktopItem(level, itemId) {
+			if (this.isDesktop && !this.isOpen(level, itemId)) {
+				this.openItem(level, itemId);
+			}
+		},
+		closeDesktopItem(level, itemId, event) {
+			if (this.isDesktop && !event.currentTarget.contains(document.activeElement)) {
+				this.closeItem(level, itemId);
+			}
+		},
+		isOpen(level, itemId) {
+			return this.openItems['level' + level] === itemId;
+		},
+	};
+}
+
+// Lock the page while keeping its current scroll position and inline styles.
+let bodyScrollState = null;
+
+function fixBody() {
+	if (bodyScrollState) {
+		return;
 	}
+
+	const body = document.body;
+	const root = document.documentElement;
+	bodyScrollState = {
+		x: window.scrollX,
+		y: window.scrollY,
+		overflow: root.style.overflow,
+		position: body.style.position,
+		top: body.style.top,
+		left: body.style.left,
+		width: body.style.width,
+		paddingRight: body.style.paddingRight,
+	};
+	const scrollbarWidth = window.innerWidth - root.clientWidth;
+
+	if (scrollbarWidth > 0) {
+		body.style.paddingRight = (parseFloat(getComputedStyle(body).paddingRight) + scrollbarWidth) + 'px';
+	}
+
+	root.style.overflow = 'hidden';
+	body.style.position = 'fixed';
+	body.style.top = -bodyScrollState.y + 'px';
+	body.style.left = -bodyScrollState.x + 'px';
+	body.style.width = '100%';
+}
+
+function unfixBody() {
+	if (!bodyScrollState) {
+		return;
+	}
+
+	const body = document.body;
+	const root = document.documentElement;
+	const state = bodyScrollState;
+	const scrollBehavior = root.style.scrollBehavior;
+	bodyScrollState = null;
+	root.style.overflow = state.overflow;
+	['position', 'top', 'left', 'width', 'paddingRight'].forEach(property => {
+		body.style[property] = state[property];
+	});
+	root.style.scrollBehavior = 'auto';
+	window.scrollTo({left: state.x, top: state.y, behavior: 'instant'});
+	root.style.scrollBehavior = scrollBehavior;
 }

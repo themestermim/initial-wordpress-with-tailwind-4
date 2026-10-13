@@ -147,14 +147,16 @@ add_action( 'widgets_init', 'starter_theme_widgets_init' );
 function starter_theme_scripts() {
 	$css_file = (_ENV === 'dev') ? '.css' : '.min.css';
 
+	wp_enqueue_style( 'mim-header', get_template_directory_uri() . '/assets/styles/header.css', array(), filemtime( get_template_directory() . '/assets/styles/header.css' ) );
+	wp_enqueue_script( 'mim-header', get_template_directory_uri() . '/assets/scripts/header.min.js', array(), filemtime( get_template_directory() . '/assets/scripts/header.min.js' ), true );
+
 	if(is_front_page()) {
-        wp_enqueue_script('header', get_template_directory_uri() . '/assets/scripts/header.min.js', array(), _S_VERSION, true);
 		wp_enqueue_style('home-style', get_template_directory_uri() . '/assets/styles/home' . $css_file, array(), _S_VERSION, 'all');
 		wp_enqueue_style('swiper-css', get_template_directory_uri() . '/assets/styles/swiper.min.css', _S_VERSION, 'all');
 		wp_enqueue_script('swiper-js', get_template_directory_uri() . '/assets/scripts/swiper-bundle.min.js', array(), _S_VERSION, true);
 	}
 
-	wp_enqueue_script('alpine', get_template_directory_uri() . '/assets/scripts/alpine.min.js', array(), _S_VERSION, true);
+	wp_enqueue_script('alpine', get_template_directory_uri() . '/assets/scripts/alpine.min.js', array('mim-header'), _S_VERSION, true);
 }
 add_action( 'wp_enqueue_scripts', 'starter_theme_scripts' );
 
@@ -191,3 +193,4 @@ add_filter('wpseo_breadcrumb_separator', function ($sep) {
 		</svg>
 	';
 });
+require get_template_directory() . '/inc/header-menu.php';

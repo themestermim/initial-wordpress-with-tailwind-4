@@ -31,7 +31,9 @@
 	"scripts": {
 		"tailwind:dev:home": "npx @tailwindcss/cli -i ./src/styles/home.css -o ./assets/styles/home.css --watch",
 		"tailwind:build:home": "tailwindcss -i ./src/styles/home.css -o ./assets/styles/home.css --minify",
-		"js-custom": "gulp customJS"
+		"js-custom": "gulp customJS",
+		"tailwind:dev:header": "tailwindcss -i ./src/styles/header.css -o ./assets/styles/header.css --watch",
+		"tailwind:build:header": "tailwindcss -i ./src/styles/header.css -o ./assets/styles/header.css --minify"
 	},
 	"dependencies": {
 		"@tailwindcss/cli": "^4.3.3",

@@ -17,6 +17,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 
+	<?php if ( ! has_site_icon() ) : ?>
+		<link rel="icon" type="image/svg+xml" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/brand/favicon.svg' ); ?>">
+	<?php endif; ?>
 	<?php wp_head(); ?>
 </head>
 
@@ -24,3 +27,5 @@
 <?php wp_body_open(); ?>
 
 
+
+<?php get_template_part( 'template-parts/layout/header' ); ?>
