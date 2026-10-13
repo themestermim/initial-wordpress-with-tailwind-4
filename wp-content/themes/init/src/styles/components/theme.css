@@ -82,8 +82,8 @@
 	--shadow-dark: 0 4px 16px oklch(0.9401 0 0 / 24%);
 	--shadow-l: 1px 0 0; */
 
-	--text-shadow-700: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.03em 0 currentColor, 0 -0.03em 0 currentColor; */
-	/*--shadow-light: 0 4px 16px oklch(0 0 0 / 20%);
+	--text-shadow-700: 0.03em 0 0 currentColor, -0.03em 0 0 currentColor, 0 0.03em 0 currentColor, 0 -0.03em 0 currentColor;
+	/*--shadow-light: 0 4px 16px oklch(0 0 0 / 20%);*/
 
 	/*--aspect-ratio: 16 / 12;*/
 
